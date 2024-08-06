@@ -52,6 +52,7 @@ return {
         "vimdoc",
         "html",
         "css",
+        "astro",
       },
     },
   },
