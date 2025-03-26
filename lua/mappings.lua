@@ -24,6 +24,14 @@ map({ "n" }, "<leader>ss", ":vimgrep /", { desc = "Enter search and replace mode
 map({ "n" }, "<leader>j", ":cnext<CR>", { desc = "Move to next quickfix item" })
 map({ "n" }, "<leader>k", ":cprev<CR>", { desc = "Move to previous quickfix item" })
 
+-- Copilot Chat
+map({ "n", "v" }, "<leader>ao", "<cmd>CopilotChatOpen<CR>", { desc = "Copilot Chat – Open Chat"})
+map({ "n", "v" }, "<leader>ar", "<cmd>CopilotChatReview<CR>", { desc = "Copilot Chat – Review Code"})
+map({ "n", "v" }, "<leader>ad", "<cmd>CopilotChatDocs<CR>", { desc = "Copilot Chat – Docs"})
+map({ "n", "v" }, "<leader>aR", "<cmd>CopilotChatOptimize<CR>", { desc = "Copilot Chat – Refactor"})
+map({ "n", "v" }, "<leader>an", "<cmd>CopilotChatBetterNamings<CR>", { desc = "Copilot Chat – Better Namings"})
+map({ "n", "v" }, "<leader>at", "<cmd>CopilotChatTests<CR>", { desc = "Copilot Chat – Write Tests"})
+
 -- I don't need terminals in vim,
 -- so disabling mappings to open them.
 map("n", "<leader>h", "<Nop>")
