@@ -89,6 +89,22 @@ map("n", "<C-l>", "<C-w>l", { desc = "Move to right window" })
 map("n", "<leader>/", "gcc", { desc = "toggle comment", remap = true })
 map("v", "<leader>/", "gc", { desc = "toggle comment", remap = true })
 
+-- Open Up a Terminal
+map("t", "<esc><esc>", "<c-\\><c-n>")
+
+map("n", "<leader>tj", function()
+  vim.cmd.vnew()
+  vim.cmd.term()
+  vim.cmd.wincmd("J")
+  vim.api.nvim_win_set_height(0, 15)
+end)
+
+map("n", "<leader>tl", function()
+  vim.cmd.vnew()
+  vim.cmd.term()
+  vim.cmd.wincmd("L")
+end)
+
 -- ============================================================================
 -- STATUSLINE
 -- ============================================================================
