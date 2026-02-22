@@ -129,10 +129,37 @@ local function setup_autocommands()
   vim.api.nvim_create_autocmd("VimEnter", {
     callback = function()
       if vim.fn.argc() == 0 then
-        M.open_daily_note()
+        local today_str = today()
+        local today_path = notes_dir .. "04-Journal/" .. today_str .. ".md"
+
+        -- create today's note from template if it doesn't exist
+        create_from_template("template-daily-note", today_path, { date = today_str })
+
+        -- find the most recent previous daily note
+        local files = vim.fn.globpath(notes_dir .. "04-Journal", "*.md", false, true)
+        table.sort(files, function(a, b) return a > b end)
+
+        local prev_path = nil
+        for _, file in ipairs(files) do
+          local date_str = vim.fn.fnamemodify(file, ":t:r")
+          if date_str ~= today_str then
+            prev_path = file
+            break
+          end
+        end
+
+        -- open today's note on the left
+        vim.cmd("edit " .. vim.fn.fnameescape(today_path))
+
+        -- open previous note on the right if it exists
+        if prev_path then
+          vim.cmd("vsplit " .. vim.fn.fnameescape(prev_path))
+          -- put cursor back on today's note on the left
+          vim.cmd("wincmd h")
+        end
       end
     end,
-    desc = "Open daily note on startup",
+    desc = "Open today and previous daily note on startup",
   })
 
   vim.api.nvim_create_user_command("NotesRg", function(opts)
