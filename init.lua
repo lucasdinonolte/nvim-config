@@ -311,18 +311,11 @@ require("lazy").setup({
     dependencies = {
       "https://github.com/junegunn/fzf",
     },
+    lazy = false,
     keys = {
       { "<Leader>ff", "<Cmd>Files<CR>",                                         desc = "Find files" },
       { "<Leader>fb", "<Cmd>Buffers<CR>",                                       desc = "Find buffers" },
       { "<Leader>fw", "<Cmd>Rg<CR>",                                            desc = "Search project" },
-
-      -- Specific fzf commands, to make working with the notes stored in my
-      -- obsidian a bit simpler, so I don't need to context switch in order
-      -- to access my notes
-      --
-      -- TODO: This should be moved to an env variable, so it's independent
-      -- of the machine that I'm running neovim on.
-      { "<Leader>no", "<Cmd>Files " .. (os.getenv("OBS_PATH") or "") .. "<CR>", desc = "Search files in notes" },
     },
   },
   -- Copilot
@@ -330,22 +323,7 @@ require("lazy").setup({
   {
     "github/copilot.vim",
   },
-  -- Copilot Chat
-  {
-    "CopilotC-Nvim/CopilotChat.nvim",
-    dependencies = {
-      { "nvim-lua/plenary.nvim", branch = "master" },
-    },
-    build = "make tiktoken",
-    keys = {
-      { "<leader>cc", "<Cmd>CopilotChat<CR>",         desc = "Open Copilot Chat",                     mode = { "n", "v" } },
-      { "<leader>ct", "<Cmd>CopilotChatTests<CR>",    desc = "Write Tests for Selected Code",         mode = { "n", "v" } },
-      { "<leader>cf", "<Cmd>CopilotChatFix<CR>",      desc = "Identify bugs in selected code",        mode = { "n", "v" } },
-      { "<leader>cr", "<Cmd>CopilotChatReview<CR>",   desc = "Review Selected Code",                  mode = { "n", "v" } },
-      { "<leader>cd", "<Cmd>CopilotChatDocs<CR>",     desc = "Write Docs Comments for selected code", mode = { "n", "v" } },
-      { "<leader>ci", "<Cmd>CopilotChatOptimize<CR>", desc = "Improve performance and readability",   mode = { "n", "v" } },
-    },
-  },
 })
 
+require("notes").setup()
 require("oil").setup()
