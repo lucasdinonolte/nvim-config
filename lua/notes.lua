@@ -1,6 +1,54 @@
 local M = {}
 local notes_dir = os.getenv("OBS_PATH") or ""
 
+-- ─────────────────────────────────────────
+-- Floating window
+-- ─────────────────────────────────────────
+
+local function open_floating(file_path)
+  local width = math.floor(vim.o.columns * 0.7)
+  local height = math.floor(vim.o.lines * 0.7)
+  local row = math.floor((vim.o.lines - height) / 2)
+  local col = math.floor((vim.o.columns - width) / 2)
+
+  local buf = vim.fn.bufnr(file_path, true)
+  vim.bo[buf].buflisted = false
+
+  local win = vim.api.nvim_open_win(buf, true, {
+    relative = "editor",
+    width = width,
+    height = height,
+    row = row,
+    col = col,
+    style = "minimal",
+    border = "rounded",
+    title = " " .. vim.fn.fnamemodify(file_path, ":t") .. " ",
+    title_pos = "center",
+  })
+
+  -- load the file into the buffer
+  vim.api.nvim_win_call(win, function()
+    if vim.fn.bufloaded(buf) == 0 then
+      vim.cmd("edit " .. vim.fn.fnameescape(file_path))
+    end
+  end)
+
+  -- close with q or escape when in normal mode
+  vim.keymap.set("n", "q", function()
+    vim.api.nvim_win_close(win, true)
+  end, { buffer = buf, nowait = true, desc = "Close float" })
+
+  vim.keymap.set("n", "<Esc>", function()
+    vim.api.nvim_win_close(win, true)
+  end, { buffer = buf, nowait = true, desc = "Close float" })
+
+  return buf, win
+end
+
+-- ─────────────────────────────────────────
+-- Note utilities
+-- ─────────────────────────────────────────
+
 local function create_from_template(template_name, dest_path, replacements)
   if vim.fn.filereadable(dest_path) == 1 then return end
   local template_path = notes_dir .. "99-Templates/" .. template_name .. ".md"
@@ -43,7 +91,17 @@ function M.open_daily_note()
   local date = today()
   local path = notes_dir .. "04-Journal/" .. date .. ".md"
   create_from_template("template-daily-note", path, { date = date })
-  open_note(path)
+  open_floating(path)
+end
+
+function M.open_inbox_note()
+  local path = notes_dir .. "inbox.md"
+  if vim.fn.filereadable(path) == 0 then
+    local file = io.open(path, "w")
+    file:write("# Inbox\n\n")
+    file:close()
+  end
+  open_floating(path)
 end
 
 -- ─────────────────────────────────────────
@@ -56,11 +114,12 @@ local function setup_keymaps()
     vim.cmd("Files " .. notes_dir)
   end, { desc = "Search files in notes" })
 
-  map("n", "<leader>nw", function() 
+  map("n", "<leader>ng", function() 
     vim.cmd("NotesRg")
   end, { desc = "Search in notes" })
 
   map("n", "<leader>dn", M.open_daily_note,        { desc = "Open daily note" })
+  map("n", "<leader>nn", M.open_inbox_note,        { desc = "Open inbox note" })
 end
 
 -- ─────────────────────────────────────────

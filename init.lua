@@ -315,7 +315,7 @@ require("lazy").setup({
     keys = {
       { "<Leader>ff", "<Cmd>Files<CR>",                                         desc = "Find files" },
       { "<Leader>fb", "<Cmd>Buffers<CR>",                                       desc = "Find buffers" },
-      { "<Leader>fw", "<Cmd>Rg<CR>",                                            desc = "Search project" },
+      { "<Leader>gg", "<Cmd>Rg<CR>",                                            desc = "Search project" },
     },
   },
   -- Copilot
