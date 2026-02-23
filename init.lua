@@ -312,11 +312,9 @@ require("lazy").setup({
       "https://github.com/junegunn/fzf",
     },
     lazy = false,
-    keys = {
-      { "<Leader>ff", "<Cmd>Files<CR>",                                         desc = "Find files" },
-      { "<Leader>fb", "<Cmd>Buffers<CR>",                                       desc = "Find buffers" },
-      { "<Leader>gg", "<Cmd>Rg<CR>",                                            desc = "Search project" },
-    },
+    config = function()
+      require("fzf").setup()
+    end,
   },
   -- Copilot
   -- Completions
